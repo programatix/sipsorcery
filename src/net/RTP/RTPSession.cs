@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Filename: RTPSession.cs
 //
 // Description: Represents an RTP session constituted of a single media stream. The session
@@ -603,7 +603,6 @@ namespace SIPSorcery.Net
                 SrtpCryptoSuites.Add(SDPSecurityDescription.CryptoSuites.AES_CM_128_HMAC_SHA1_32);
             }
         }
-
 
         protected void ResetRemoteSDPSsrcAttributes()
         {
@@ -1744,7 +1743,6 @@ namespace SIPSorcery.Net
                     {
                         rtpPort = mediaStream.GetRTPChannel().RTPPort;
                     }
-
                 }
 
                 SDPMediaAnnouncement announcement = new SDPMediaAnnouncement(mediaStream.LocalTrack.Kind, rtpPort, mediaStream.LocalTrack.Capabilities);
@@ -1855,7 +1853,7 @@ namespace SIPSorcery.Net
             }
 
             // If RTCP is multiplexed we don't need a control socket.
-            int bindPort = (rtpSessionConfig.BindPort == 0) ? 0 : rtpSessionConfig.BindPort + m_rtpChannelsCount * 2;
+            int bindPort = (rtpSessionConfig.BindPort == 0) ? 0 : rtpSessionConfig.BindPort + m_rtpChannelsCount;
             var rtpChannel = new RTPChannel(!rtpSessionConfig.IsRtcpMultiplexed, rtpSessionConfig.BindAddress, bindPort, rtpSessionConfig.RtpPortRange);
 
 
@@ -1870,7 +1868,6 @@ namespace SIPSorcery.Net
 
             // Start the RTP, and if required the Control, socket receivers and the RTCP session.
             rtpChannel.Start();
-
 
             m_rtpChannelsCount++;
 
@@ -2318,13 +2315,12 @@ namespace SIPSorcery.Net
                     return AudioStream;
                 }
             }
-            else
+            
+            if (HasVideo)
             {
-                if (HasVideo)
-                {
-                    return VideoStream;
-                }
+                return VideoStream;
             }
+            
 
             return null;
         }
